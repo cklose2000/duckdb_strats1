@@ -1,29 +1,21 @@
-# DuckDB-Centric Backtesting Framework
+# DuckDB Automated Trading Strategy Framework
 
-A comprehensive backtesting system for financial strategies using DuckDB as the core database engine. This framework emphasizes SQL-based transformations, metadata tracking, and reproducible research.
+A comprehensive backtesting system using DuckDB for high-performance financial data processing and trading strategy optimization.
 
 ## System Architecture
 
-The system is organized around a central DuckDB database with metadata tables that track all system objects:
+This framework leverages DuckDB's in-process analytics capabilities to efficiently test and optimize trading strategies. The system is designed around these principles:
 
-- **scripts** - Stores all Python/R scripts with execution metadata
-- **queries** - Stores all SQL queries with purpose and results summary
-- **models** - Tracks algorithmic models with parameters and performance
-- **datasets** - Catalogs all data sources and transformations
-- **executions** - Logs all backtests with parameters and results
+- All data transformations are executed as SQL inside DuckDB
+- Intermediate results are stored in database tables, not CSV files
+- All operations are automatically logged to metadata tables
+- Transactions are used for multi-step operations
+- Metadata is queried to check existing functionality before building new features
 
-## Core Principles
-
-1. Execute ALL data transformations as SQL inside DuckDB
-2. Store intermediate results in database tables, not CSV files
-3. Auto-log all scripts and queries to metadata tables
-4. Use transactions for multi-step operations
-5. Query metadata to check existing functionality before building new features
-
-## Repository Structure
+### Repository Structure
 
 ```
-/
+./
 ├── db/
 │   └── backtest.ddb         # Main DuckDB database
 ├── migrations/              # Schema change scripts
@@ -34,117 +26,94 @@ The system is organized around a central DuckDB database with metadata tables th
 │   └── models/              # Algorithmic model implementations
 ├── notebooks/               # Analysis notebooks
 └── utils/
-    ├── analysis/           # Analysis and reporting utilities
     ├── db_manager.py        # Database connection utilities
     └── metadata_logger.py   # Automatic logging functions
 ```
 
-## Getting Started
+## Metadata Schema
 
-### Prerequisites
+The system uses a metadata schema to track all system objects:
 
-- Python 3.7+
+- `scripts` table - stores all Python/R scripts with execution metadata
+- `queries` table - stores all SQL queries with purpose and results summary
+- `models` table - tracks algorithmic models with parameters and performance
+- `datasets` table - catalogs all data sources and transformations
+- `executions` table - logs all backtests with parameters and results
+
+## Automated Strategy Testing Framework
+
+The automated strategy testing framework allows you to:
+
+1. Generate multiple trading strategies with varied parameters
+2. Backtest these strategies against historical market data
+3. Analyze performance using key metrics (Sharpe, profit factor, etc.)
+4. Optimize strategies using genetic algorithms
+5. Store all results in the DuckDB database for future analysis
+
+### Key Components
+
+- **Strategy Generator**: Creates strategy variants by varying parameters like SMA periods, RSI thresholds
+- **Parameterized Strategy**: Implementation of trading strategies with configurable parameters
+- **Batch Strategy Tester**: Tests multiple strategies in sequence and ranks them by performance
+- **Genetic Optimizer**: Evolves and improves strategies using genetic algorithms
+- **Automated Backtesting Pipeline**: Orchestrates the entire process
+
+## Usage
+
+### Running the Automated Backtesting Pipeline
+
+```bash
+python -m scripts.models.run_automated_backtests --ticker SPY --num 100 --population 50 --generations 10 --plot-top 10
+```
+
+Parameters:
+- `--ticker`: Ticker symbol to test (default: SPY)
+- `--num`: Number of random strategies to test (default: 100)
+- `--population`: Genetic algorithm population size (default: 50)
+- `--generations`: Number of generations for genetic evolution (default: 10)
+- `--plot-top`: Number of top strategies to plot (default: 10)
+
+### Analyzing Results
+
+The results are stored in the DuckDB database and can be analyzed using SQL queries. Sample queries are provided in `queries/analyze_backtest_results.sql`.
+
+## Strategy Parameters
+
+The framework supports the following strategy parameters:
+
+- **SMA Periods**: Fast and slow SMA periods (e.g., 20/50)
+- **RSI Period**: Period for calculating RSI (e.g., 14)
+- **RSI Thresholds**: Buy/sell thresholds for RSI (e.g., <30 for buy, >70 for sell)
+- **Secondary RSI Thresholds**: Secondary thresholds for signal days
+- **Volatility Calculation Period**: Period for calculating volatility
+
+## Example Strategy Logic
+
+The multi-timeframe strategy combines signals from different timeframes:
+
+1. Daily timeframe for trend identification (SMA crossovers)
+2. Hourly/5min timeframe for entry/exit timing (RSI conditions)
+3. Trade action generation based on combined signals
+
+## Database Views
+
+The system creates several views in the database:
+
+- `all_strategies_summary`: Summary of all tested strategies
+- `top_strategies`: Top strategies ranked by different metrics
+- Various timeframe-specific views for data analysis
+
+## Prerequisites
+
+- Python 3.8+
 - DuckDB
-- Required packages: pandas, scikit-learn, yfinance (for sample data)
-
-### Installation
-
-1. Clone this repository
-2. Install the required packages:
-
-```bash
-pip install duckdb pandas scikit-learn yfinance
-```
-
-3. Initialize the database and run migrations:
-
-```bash
-python -m utils.initialize_db
-```
-
-### Example Workflow
-
-1. **Data Ingestion**: Load stock data into the database
-
-```bash
-python -m scripts.data_ingestion.ingest_stock_data
-```
-
-2. **Feature Engineering**: Create technical indicators and features
-
-```bash
-python -m scripts.feature_engineering.create_technical_indicators
-```
-
-3. **Model Training**: Train a return prediction model
-
-```bash
-python -m scripts.models.predict_returns
-```
-
-4. **Analyze Results**: View backtest results and trade details
-
-```bash
-python -m utils.analysis.view_trades
-python -m utils.analysis.view_backtest_details
-```
-
-5. **View Metadata**: Run metadata queries to understand system state
-
-```bash
-duckdb -c "ATTACH 'db/backtest.ddb' AS db; RUN 'queries/view_metadata.sql';"
-```
-
-## Key Features
-
-### Metadata-Driven Development
-
-Every object in the system is discoverable through metadata:
-
-- Query `metadata_scripts` to find all available data ingestion scripts
-- Query `metadata_datasets` to see transformation lineage
-- Query `metadata_models` to review model performance
-
-### SQL-First Approach
-
-All transformations happen in SQL:
-
-- Window functions for time-series analysis
-- Complex joins for feature engineering
-- Statistical calculations using DuckDB's built-in functions
-
-### Automatic Logging
-
-All activities are automatically logged to metadata tables:
-
-- Script executions with timing information
-- Query performance and results summaries
-- Model training metrics and parameters
-
-### Analysis and Reporting
-
-The system includes utilities for analyzing backtest results:
-
-- **Trade Summary**: View all trades with entry/exit prices and returns
-- **Detailed Analysis**: Analyze the market context around each trade
-- **Performance Metrics**: Calculate win rates, returns, and other metrics
-
-To analyze backtest results:
-
-```bash
-# View a summary of all trades
-python -m utils.analysis.view_trades
-
-# See detailed analysis of trades with surrounding context
-python -m utils.analysis.view_backtest_details
-```
-
-## Development Workflow
-
-1. **View Existing Components**: Query metadata tables to discover existing functionality
-2. **Implement SQL Logic**: Define views and functions in SQL where possible
-3. **Create Python Wrappers**: For orchestration and visualization only
-4. **Log Everything**: Ensure all new components log themselves to metadata
+- Dependencies in requirements.txt:
+  - pandas
+  - numpy
+  - matplotlib
+  - scikit-learn
+  - requests
+  - python-dotenv
 
 ## License
 

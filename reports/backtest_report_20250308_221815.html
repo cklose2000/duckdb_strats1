@@ -1,0 +1,238 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>DuckDB Backtesting Report</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                h1, h2, h3 { color: #333366; }
+                table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                tr:nth-child(even) { background-color: #f9f9f9; }
+                .metric-card { 
+                    display: inline-block; 
+                    width: 200px; 
+                    margin: 10px; 
+                    padding: 15px; 
+                    border-radius: 5px; 
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+                    text-align: center;
+                    background-color: #f8f8f8;
+                }
+                .metric-value { font-size: 24px; font-weight: bold; color: #333366; }
+                .metric-label { font-size: 14px; color: #666; }
+                .chart-container { margin: 20px 0; }
+            </style>
+        </head>
+        <body>
+            <h1>DuckDB Backtesting Report</h1>
+            <p>Generated on: 2025-03-08 22:18:15</p>
+        
+<h2>Overall Summary</h2>
+<div>
+
+            <div class="metric-card">
+                <div class="metric-value">168</div>
+                <div class="metric-label">Total Trades</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">50</div>
+                <div class="metric-label">Strategies Tested</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">0.62%</div>
+                <div class="metric-label">Average Return</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">51.19%</div>
+                <div class="metric-label">Overall Win Rate</div>
+            </div>
+        
+</div>
+<h2>Top Strategies by Sharpe Ratio</h2>
+<table border="1" class="dataframe dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>strategy_id</th>
+      <th>total_trades</th>
+      <th>win_rate</th>
+      <th>profit_factor</th>
+      <th>avg_return_pct</th>
+      <th>max_drawdown_pct</th>
+      <th>sharpe_ratio</th>
+      <th>annualized_return_pct</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>47</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.68</td>
+      <td>0.0</td>
+      <td>207.38</td>
+      <td>424.52</td>
+    </tr>
+    <tr>
+      <td>41</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.23</td>
+      <td>0.0</td>
+      <td>178.71</td>
+      <td>309.84</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.52</td>
+      <td>0.0</td>
+      <td>138.72</td>
+      <td>382.15</td>
+    </tr>
+    <tr>
+      <td>45</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.73</td>
+      <td>0.0</td>
+      <td>128.89</td>
+      <td>435.68</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.65</td>
+      <td>0.0</td>
+      <td>121.51</td>
+      <td>414.59</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.72</td>
+      <td>0.0</td>
+      <td>119.43</td>
+      <td>432.93</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.48</td>
+      <td>0.0</td>
+      <td>101.16</td>
+      <td>372.19</td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.29</td>
+      <td>0.0</td>
+      <td>91.17</td>
+      <td>324.40</td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.23</td>
+      <td>0.0</td>
+      <td>85.71</td>
+      <td>310.20</td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>2</td>
+      <td>100.0</td>
+      <td>NaN</td>
+      <td>1.65</td>
+      <td>0.0</td>
+      <td>77.94</td>
+      <td>415.78</td>
+    </tr>
+  </tbody>
+</table>
+
+            <div class="chart-container">
+                <img src="sharpe_ratio_chart_20250308_221815.png" alt="Sharpe Ratio Chart" style="max-width: 100%;">
+            </div>
+            
+<h2>Trade Analysis by Direction</h2>
+<table border="1" class="dataframe dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>direction</th>
+      <th>count</th>
+      <th>avg_return_pct</th>
+      <th>win_rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LONG</td>
+      <td>26</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <td>SHORT</td>
+      <td>142</td>
+      <td>0.74</td>
+      <td>60.56</td>
+    </tr>
+  </tbody>
+</table>
+
+        <div class="chart-container">
+            <img src="direction_return_chart_20250308_221815.png" alt="Direction Return Chart" style="max-width: 100%;">
+        </div>
+        
+<h2>Trade Distribution</h2>
+
+            <div class="chart-container">
+                <img src="return_distribution_chart_20250308_221815.png" alt="Return Distribution Chart" style="max-width: 100%;">
+            </div>
+            
+<h2>System Metadata</h2>
+
+        <p>Metadata object counts:</p>
+        <ul>
+            <li>Scripts: 20</li>
+            <li>Queries: 36</li>
+            <li>Models: 124</li>
+            <li>Executions: 260</li>
+            <li>Datasets: 6</li>
+        </ul>
+        
+<h2>Last Execution Details</h2>
+
+            <p>Last execution:</p>
+            <ul>
+                <li>ID: 3efb7506340e4ec8ad8047201f1e5300</li>
+                <li>Name: calculate_strategy_performance</li>
+                <li>Description: Calculate performance metrics for all strategies</li>
+                <li>Start: 2025-03-08 22:16:31.332028</li>
+                <li>End: 2025-03-08 22:16:31.332028</li>
+                <li>Status: COMPLETED</li>
+                <li>Summary: Updated performance metrics for 50 strategies</li>
+            </ul>
+            
+
+        </body>
+        </html>
+        
